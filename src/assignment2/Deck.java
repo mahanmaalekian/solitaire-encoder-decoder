@@ -128,7 +128,14 @@ public class Deck {
 	 */
 	public void moveCard(Card c, int p) {
 		/**** ADD CODE HERE ****/
-
+		Card tmp = c;
+		for (int i = 0; i < p; i++){
+			tmp = tmp.next;
+		}
+		c.prev = tmp;
+		c.next = tmp.next;
+		tmp.next.prev = c;
+		tmp.next = c;
 	}
 
 	/*
