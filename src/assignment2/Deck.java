@@ -163,6 +163,17 @@ public class Deck {
 	 */
 	public void countCut() {
 		/**** ADD CODE HERE ****/
+		int limit = head.prev.getValue();
+		Card tmp = head;
+		for (int i = 0; i < limit-1; i++){
+			tmp = tmp.next;
+		}
+		Card tmpNext = tmp.next;
+		tmp.next = head.prev;
+		head.prev.prev.next = head;
+		head.prev.prev = tmp;
+		head = tmpNext;
+		head.prev = tmp.next;
 
 	}
 
@@ -174,7 +185,13 @@ public class Deck {
 	 */
 	public Card lookUpCard() {
 		/**** ADD CODE HERE ****/
-		return null;
+		int value = head.getValue();
+		Card tmp = head;
+		for (int i = 0; i < value; i++){
+			tmp = tmp.next;
+		}
+		if (tmp instanceof Joker) return null;
+		return tmp;
 	}
 
 	/*
@@ -183,7 +200,33 @@ public class Deck {
 	 */
 	public int generateNextKeystreamValue() {
 		/**** ADD CODE HERE ****/
-		return 0;
+		Card keyStreamCard = null;
+		while (keyStreamCard == null)
+		{
+			moveCard(locateJoker("red"), 1);
+			moveCard(locateJoker("black"),2);
+			Card redJoker = locateJoker("red");
+			Card blackJoker = locateJoker("black");
+			int distanceRed = 0;
+			int distanceBlack = 0;
+			while (redJoker.prev != head){
+				redJoker = redJoker.prev;
+				distanceRed++;
+			}
+			while (blackJoker.prev != head){
+				blackJoker = blackJoker.prev;
+				distanceBlack++;
+			}
+			if (distanceBlack > distanceRed){
+				tripleCut(redJoker, blackJoker);
+			}
+			else {
+				tripleCut(blackJoker, redJoker);
+			}
+			countCut();
+			keyStreamCard = lookUpCard();
+		}
+		return keyStreamCard.getValue();
 	}
 
 
