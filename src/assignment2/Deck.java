@@ -14,6 +14,25 @@ public class Deck {
 	 */
 	public Deck(int numOfCardsPerSuit, int numOfSuits) {
 		/**** ADD CODE HERE ****/
+		if (numOfCardsPerSuit < 1 || numOfCardsPerSuit > 13)
+		{
+			throw new IllegalArgumentException("Number of cards per suit not in range");
+		}
+		if (numOfSuits < 1 || numOfSuits > suitsInOrder.length)
+		{
+			throw new IllegalArgumentException("Number of suits not in range");
+		}
+		numOfCards = 0;
+		for (int i = 0; i < numOfSuits; i++){
+			for (int j = 1; j <= numOfCardsPerSuit; j++) {
+				Card card = new PlayingCard(suitsInOrder[i],j);
+				this.addCard(card);
+			}
+		}
+		Card redJoker = new Joker("r");
+		this.addCard(redJoker);
+		Card blackJoker = new Joker("b");
+		this.addCard(blackJoker);
 	}
 
 	/* 
@@ -22,6 +41,11 @@ public class Deck {
 	 */
 	public Deck(Deck d) {
 		/**** ADD CODE HERE ****/
+		Card tmp = d.head;
+		for (int i = 0; i < d.numOfCards; i++) {
+			addCard(tmp.getCopy());
+			tmp = tmp.next;
+		}
 	}
 
 	/*
@@ -35,6 +59,19 @@ public class Deck {
 	 */
 	public void addCard(Card c) {
 		/**** ADD CODE HERE ****/
+		//is the head.next the next card?
+		if (numOfCards == 0){
+			head = c;
+			head.next = c;
+			head.prev = c;
+		}
+		else {
+			c.next = head;
+			c.prev = head.prev;
+			head.prev.next = c;
+			head.prev = c;
+		}
+		numOfCards++;
 	}
 
 	/*
@@ -43,7 +80,25 @@ public class Deck {
 	 * number of cards in the deck.
 	 */
 	public void shuffle() {
-		/**** ADD CODE HERE ****/ 
+		/**** ADD CODE HERE ****/
+		Card [] cardArr = new Card[numOfCards];
+		Card tmp = head;
+		for (int i = 0; i < numOfCards; i++){
+			cardArr[i] = tmp; //tmp.getcopy?
+			tmp = tmp.next;
+		}
+		for (int i = numOfCards - 1; i > 0; i--){
+			int j = gen.nextInt(i+1);
+			Card holder = cardArr[i];
+			cardArr[i] = cardArr[j];
+			cardArr[j] = holder;
+		}
+		int tmpNumOfCards = numOfCards;
+		numOfCards = 0;
+		for (int i = 0; i < tmpNumOfCards; i++){
+			this.addCard(cardArr[i]);
+		}
+
 	}
 
 	/*
@@ -53,6 +108,16 @@ public class Deck {
 	 */
 	public Joker locateJoker(String color) {
 		/**** ADD CODE HERE ****/
+//		if (!(color.equalsIgnoreCase("red")) || !color.equalsIgnoreCase("black")){
+//			throw new IllegalArgumentException("Not a valid color");
+//		}
+		Card tmp = head;
+		for (int i = 0; i < numOfCards; i++) {
+			if (tmp instanceof Joker && ((Joker) tmp).getColor().equalsIgnoreCase(color)){
+				return (Joker) tmp;
+			}
+			tmp = tmp.next;
+		}
 		return null;
 	}
 
@@ -63,6 +128,7 @@ public class Deck {
 	 */
 	public void moveCard(Card c, int p) {
 		/**** ADD CODE HERE ****/
+
 	}
 
 	/*
