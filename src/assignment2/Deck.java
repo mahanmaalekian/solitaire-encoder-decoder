@@ -147,6 +147,13 @@ public class Deck {
 	 */
 	public void tripleCut(Card firstCard, Card secondCard) {
 		/**** ADD CODE HERE ****/
+		Card tmpFirstCardPrev = firstCard.prev;
+		firstCard.prev = head.prev;
+		head.prev.next = firstCard;
+		Card tmpSecondCardNext = secondCard.next;
+		secondCard.next = head;
+		head = tmpSecondCardNext;
+		head.prev = tmpFirstCardPrev;
 	}
 
 	/*
@@ -156,6 +163,7 @@ public class Deck {
 	 */
 	public void countCut() {
 		/**** ADD CODE HERE ****/
+
 	}
 
 	/*
