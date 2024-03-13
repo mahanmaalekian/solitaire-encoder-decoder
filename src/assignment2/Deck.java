@@ -166,25 +166,6 @@ public class Deck {
 	 */
 	public void tripleCut(Card firstCard, Card secondCard) {
 		/**** ADD CODE HERE ****/
-//		Card tmpFirstCardPrev = firstCard.prev;
-//		firstCard.prev = head.prev;
-//		head.prev.next = firstCard;
-//		Card tmpSecondCardNext = secondCard.next;
-//		secondCard.next = head;
-//		head = tmpSecondCardNext;
-//		head.prev = tmpFirstCardPrev;
-
-
-//		Card tmpFirstCardPrev = firstCard.prev;
-//		firstCard.prev = head.prev;
-//		head.prev.next = firstCard;
-//		Card tmpSecondCardNext = secondCard.next;
-//		secondCard.next = head;
-//		head = tmpSecondCardNext;
-//		head.prev = tmpFirstCardPrev;
-//		head.prev.prev.prev = secondCard;
-//		head.prev.next = head;
-
 		if (firstCard == head && secondCard == head.prev) return;
 		if (secondCard == head.prev){
 			head = firstCard;
@@ -194,7 +175,6 @@ public class Deck {
 			head = secondCard.next;
 			return;
 		}
-
 
 		Card tmpFirstCardPrev = firstCard.prev;
 		Card tmpSecondCardNext = secondCard.next;
@@ -223,12 +203,6 @@ public class Deck {
 		for (int i = 0; i < limit-1; i++){
 			tmp = tmp.next;
 		}
-//		Card tmpNext = tmp.next;
-//		tmp.next = head.prev;
-//		head.prev.prev.next = head;
-//		head.prev.prev = tmp;
-//		head = tmpNext;
-//		head.prev = tmp.next;
 		Card tmpNext = tmp.next;
 		Card tmpheadPrevPrev = head.prev.prev;
 		Card tmpHeadPrev = head.prev;
@@ -242,15 +216,6 @@ public class Deck {
 		tmpHeadPrev.next = tmpNext;
 		tmpNext.prev = tmpHeadPrev;
 		head = tmpNext;
-
-
-//		head.prev.prev.next = head;
-//		head.prev.prev = tmp;
-//		head = tmpNext;
-//		head.prev = tmp.next;
-//		tmp.prev.prev = tmpheadPrevPrev;
-//		head.prev.next = head;
-
 	}
 
 	/*
