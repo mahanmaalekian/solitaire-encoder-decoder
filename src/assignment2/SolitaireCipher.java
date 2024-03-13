@@ -3,6 +3,8 @@ package assignment2;
 public class SolitaireCipher {
 	public Deck key;
 
+	private int[] usedKeyStream;
+
 	public SolitaireCipher (Deck key) {
 		this.key = new Deck(key); // deep copy of the deck
 	}
@@ -31,17 +33,19 @@ public class SolitaireCipher {
 				tmp = tmp + msg.charAt(i);
 			}
 		}
-		int[] keyStream = getKeystream(tmp.length());
+		usedKeyStream = getKeystream(tmp.length());
+		System.out.println("tmp " + tmp.length());
 		String encoded = "";
 		for (int i = 0; i < tmp.length(); i++){
 			char tmpChar = tmp.charAt(i);
 			int position = tmpChar - 'A';
-			position += keyStream[i];
+			position += usedKeyStream[i];
 			position %= 26;
 			tmpChar = (char) ('A' + position);
 			encoded = encoded + tmpChar;
 		}
-
+		System.out.println(java.util.Arrays.toString(usedKeyStream));
+		System.out.println(encoded);
 		return encoded;
 	}
 
@@ -50,10 +54,12 @@ public class SolitaireCipher {
 	 */
 	public String decode(String msg) {
 		/**** ADD CODE HERE ****/
-		int[] keyStream = getKeystream(msg.length());
+
+		//int[] keyStream = getKeystream(msg.length());
+		System.out.println(msg.length());
 		String decoded = "";
 		for (int i = 0; i < msg.length(); i++){
-			int shift = keyStream[i];
+			int shift = usedKeyStream[i];
 			shift = shift % 26;
 			shift = 26 - shift;
 			char tmpChar = msg.charAt(i);
@@ -63,7 +69,14 @@ public class SolitaireCipher {
 			tmpChar = (char) ('A' + position);
 			decoded = decoded + tmpChar;
 		}
+		System.out.println(java.util.Arrays.toString(usedKeyStream));
+		System.out.println(decoded);
 		return decoded;
 	}
 
+	public void returnKey (){
+ 		int [] keyStream = getKeystream(12);
+		System.out.println(java.util.Arrays.toString(keyStream));
+
+	}
 }

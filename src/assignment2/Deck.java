@@ -29,9 +29,9 @@ public class Deck {
 				this.addCard(card);
 			}
 		}
-		Card redJoker = new Joker("r");
+		Card redJoker = new Joker("red");
 		this.addCard(redJoker);
-		Card blackJoker = new Joker("b");
+		Card blackJoker = new Joker("black");
 		this.addCard(blackJoker);
 	}
 
@@ -128,10 +128,29 @@ public class Deck {
 	 */
 	public void moveCard(Card c, int p) {
 		/**** ADD CODE HERE ****/
+		if (p == 0) return;
 		Card tmp = c;
 		for (int i = 0; i < p; i++){
 			tmp = tmp.next;
 		}
+		if (c == head) {
+			System.out.println("head reached");
+			Card tmpNext = tmp.next;
+			Card tmpHeadNext = head.next;
+			Card tmpHeadPrev = head.prev;
+
+
+			tmp.next = head;
+			head.prev = tmp;
+
+			head.next = tmpNext;
+			tmpNext.prev = head;
+
+			tmpHeadNext.prev = tmpHeadPrev;
+			tmpHeadPrev.next = tmpHeadNext;
+			return;
+		}
+		//TODO: add case for if the next is head as Yun said
 		c.prev.next = c.next;
 		c.next.prev = c.prev;
 		c.prev = tmp;
@@ -147,13 +166,48 @@ public class Deck {
 	 */
 	public void tripleCut(Card firstCard, Card secondCard) {
 		/**** ADD CODE HERE ****/
+//		Card tmpFirstCardPrev = firstCard.prev;
+//		firstCard.prev = head.prev;
+//		head.prev.next = firstCard;
+//		Card tmpSecondCardNext = secondCard.next;
+//		secondCard.next = head;
+//		head = tmpSecondCardNext;
+//		head.prev = tmpFirstCardPrev;
+
+
+//		Card tmpFirstCardPrev = firstCard.prev;
+//		firstCard.prev = head.prev;
+//		head.prev.next = firstCard;
+//		Card tmpSecondCardNext = secondCard.next;
+//		secondCard.next = head;
+//		head = tmpSecondCardNext;
+//		head.prev = tmpFirstCardPrev;
+//		head.prev.prev.prev = secondCard;
+//		head.prev.next = head;
+
+		if (firstCard == head && secondCard == head.prev) return;
+		if (secondCard == head.prev){
+			head = firstCard;
+			return;
+		}
+		if (firstCard == head) {
+			head = secondCard.next;
+			return;
+		}
+
+
 		Card tmpFirstCardPrev = firstCard.prev;
+		Card tmpSecondCardNext = secondCard.next;
 		firstCard.prev = head.prev;
 		head.prev.next = firstCard;
-		Card tmpSecondCardNext = secondCard.next;
+
 		secondCard.next = head;
+		head.prev = secondCard;
+
+		tmpSecondCardNext.prev = tmpFirstCardPrev;
+		tmpFirstCardPrev.next = tmpSecondCardNext;
+
 		head = tmpSecondCardNext;
-		head.prev = tmpFirstCardPrev;
 	}
 
 	/*
@@ -163,17 +217,39 @@ public class Deck {
 	 */
 	public void countCut() {
 		/**** ADD CODE HERE ****/
-		int limit = head.prev.getValue();
+		int limit = head.prev.getValue() % numOfCards;
+		if ((numOfCards - limit) == 1 || limit == 0 ) return;
 		Card tmp = head;
 		for (int i = 0; i < limit-1; i++){
 			tmp = tmp.next;
 		}
+//		Card tmpNext = tmp.next;
+//		tmp.next = head.prev;
+//		head.prev.prev.next = head;
+//		head.prev.prev = tmp;
+//		head = tmpNext;
+//		head.prev = tmp.next;
 		Card tmpNext = tmp.next;
+		Card tmpheadPrevPrev = head.prev.prev;
+		Card tmpHeadPrev = head.prev;
+
 		tmp.next = head.prev;
-		head.prev.prev.next = head;
 		head.prev.prev = tmp;
+
+		tmpheadPrevPrev.next = head;
+		head.prev = tmpheadPrevPrev;
+
+		tmpHeadPrev.next = tmpNext;
+		tmpNext.prev = tmpHeadPrev;
 		head = tmpNext;
-		head.prev = tmp.next;
+
+
+//		head.prev.prev.next = head;
+//		head.prev.prev = tmp;
+//		head = tmpNext;
+//		head.prev = tmp.next;
+//		tmp.prev.prev = tmpheadPrevPrev;
+//		head.prev.next = head;
 
 	}
 
@@ -203,27 +279,39 @@ public class Deck {
 		Card keyStreamCard = null;
 		while (keyStreamCard == null)
 		{
-			moveCard(locateJoker("red"), 1);
-			moveCard(locateJoker("black"),2);
+			System.out.println("jello ");
+			printAllCards();
 			Card redJoker = locateJoker("red");
 			Card blackJoker = locateJoker("black");
+			System.out.println(redJoker);
+			moveCard(locateJoker("red"), 1);
+			moveCard(locateJoker("black"),2);
+			printAllCards();
+
 			int distanceRed = 0;
 			int distanceBlack = 0;
-			while (redJoker.prev != head){
-				redJoker = redJoker.prev;
+			Card redJokerTmp = locateJoker("red");
+			Card blackJokerTmp = locateJoker("black");
+			while (redJokerTmp.prev != head && redJokerTmp != head){
+				redJokerTmp = redJokerTmp.prev;
 				distanceRed++;
 			}
-			while (blackJoker.prev != head){
-				blackJoker = blackJoker.prev;
+			while (blackJokerTmp.prev != head && blackJokerTmp != head){
+				blackJokerTmp = blackJokerTmp.prev;
 				distanceBlack++;
 			}
+
 			if (distanceBlack > distanceRed){
-				tripleCut(redJoker, blackJoker);
+				tripleCut(locateJoker("red"), locateJoker("black"));
 			}
 			else {
-				tripleCut(blackJoker, redJoker);
+				tripleCut(locateJoker("black"), locateJoker("red"));
 			}
+			System.out.println("triple");
+			printAllCards();
 			countCut();
+			System.out.println("count");
+			printAllCards();
 			keyStreamCard = lookUpCard();
 		}
 		return keyStreamCard.getValue();
@@ -307,6 +395,23 @@ public class Deck {
 		public String getColor() {
 			return this.redOrBlack;
 		}
+	}
+
+	public void printAllCards() {
+		Card c = head;
+		for (int i = 0; i < numOfCards; i++){
+			System.out.print(c + " ");
+			c = c.next;
+		}
+		System.out.println();
+	}
+	public void printAllCardsback() {
+		Card c = head.prev;
+		for (int i = 0; i < numOfCards; i++){
+			System.out.print(c + " ");
+			c = c.prev;
+		}
+		System.out.println();
 	}
 
 }
