@@ -133,6 +133,9 @@ public class Deck {
 		for (int i = 0; i < p; i++){
 			tmp = tmp.next;
 		}
+//		if (tmp == head) {
+//			tmp = tmp.next;
+//		}
 		if (c == head) {
 			System.out.println("head reached");
 			Card tmpNext = tmp.next;
