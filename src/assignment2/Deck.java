@@ -59,7 +59,6 @@ public class Deck {
 	 */
 	public void addCard(Card c) {
 		/**** ADD CODE HERE ****/
-		//is the head.next the next card?
 		if (numOfCards == 0){
 			head = c;
 			head.next = c;
@@ -84,7 +83,7 @@ public class Deck {
 		Card [] cardArr = new Card[numOfCards];
 		Card tmp = head;
 		for (int i = 0; i < numOfCards; i++){
-			cardArr[i] = tmp; //tmp.getcopy?
+			cardArr[i] = tmp;
 			tmp = tmp.next;
 		}
 		for (int i = numOfCards - 1; i > 0; i--){
@@ -108,9 +107,6 @@ public class Deck {
 	 */
 	public Joker locateJoker(String color) {
 		/**** ADD CODE HERE ****/
-//		if (!(color.equalsIgnoreCase("red")) || !color.equalsIgnoreCase("black")){
-//			throw new IllegalArgumentException("Not a valid color");
-//		}
 		Card tmp = head;
 		for (int i = 0; i < numOfCards; i++) {
 			if (tmp instanceof Joker && ((Joker) tmp).getColor().equalsIgnoreCase(color)){
@@ -133,11 +129,8 @@ public class Deck {
 		for (int i = 0; i < p; i++){
 			tmp = tmp.next;
 		}
-//		if (tmp == head) {
-//			tmp = tmp.next;
-//		}
+
 		if (c == head) {
-			System.out.println("head reached");
 			Card tmpNext = tmp.next;
 			Card tmpHeadNext = head.next;
 			Card tmpHeadPrev = head.prev;
@@ -153,7 +146,6 @@ public class Deck {
 			tmpHeadPrev.next = tmpHeadNext;
 			return;
 		}
-		//TODO: add case for if the next is head as Yun said
 		c.prev.next = c.next;
 		c.next.prev = c.prev;
 		c.prev = tmp;
@@ -247,14 +239,10 @@ public class Deck {
 		Card keyStreamCard = null;
 		while (keyStreamCard == null)
 		{
-			System.out.println("jello ");
-			printAllCards();
 			Card redJoker = locateJoker("red");
 			Card blackJoker = locateJoker("black");
-			System.out.println(redJoker);
 			moveCard(locateJoker("red"), 1);
 			moveCard(locateJoker("black"),2);
-			printAllCards();
 
 			int distanceRed = 0;
 			int distanceBlack = 0;
@@ -275,11 +263,7 @@ public class Deck {
 			else {
 				tripleCut(locateJoker("black"), locateJoker("red"));
 			}
-			System.out.println("triple");
-			printAllCards();
 			countCut();
-			System.out.println("count");
-			printAllCards();
 			keyStreamCard = lookUpCard();
 		}
 		return keyStreamCard.getValue();
@@ -364,22 +348,4 @@ public class Deck {
 			return this.redOrBlack;
 		}
 	}
-
-	public void printAllCards() {
-		Card c = head;
-		for (int i = 0; i < numOfCards; i++){
-			System.out.print(c + " ");
-			c = c.next;
-		}
-		System.out.println();
-	}
-	public void printAllCardsback() {
-		Card c = head.prev;
-		for (int i = 0; i < numOfCards; i++){
-			System.out.print(c + " ");
-			c = c.prev;
-		}
-		System.out.println();
-	}
-
 }
